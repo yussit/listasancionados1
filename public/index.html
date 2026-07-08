@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Acceso autorizado para la plataforma de sancionados ASIPONA.">
+  <title>Acceso Autorizado ASIPONA</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar__inner">
+      <div class="brand">
+        <img class="brand-logo" src="/assets/logo-coatzacoalcos.png" alt="ASIPONA Coatzacoalcos">
+        <div>
+          <p class="eyebrow">ASIPONA</p>
+          <h1>Plataforma de sancionados</h1>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell app-layout login-page">
+    <section class="login-layout" aria-labelledby="loginTitle">
+      <aside class="login-hero">
+        <img class="login-hero__logo" src="/assets/logo-coatzacoalcos.png" alt="ASIPONA Coatzacoalcos">
+        <p class="eyebrow">Control de accesos</p>
+        <h2>Consulta centralizada de personas sancionadas</h2>
+        <p>Verificacion rapida para accesos peatonales y vehiculares con bitacora por usuario y punto de acceso.</p>
+        <div class="feature-strip" aria-label="Funciones principales">
+          <span>Busqueda</span>
+          <span>QR</span>
+          <span>Bitacora</span>
+        </div>
+      </aside>
+
+      <form id="loginForm" class="form-surface login-card">
+        <div class="login-brand">
+          <img class="brand-logo brand-logo--large" src="/assets/logo-coatzacoalcos.png" alt="ASIPONA Coatzacoalcos">
+          <div>
+            <p class="eyebrow">Acceso autorizado</p>
+            <h2 id="loginTitle">Ingreso al sistema</h2>
+          </div>
+        </div>
+        <p class="login-copy">Personal de seguridad autorizado para accesos ASIPONA.</p>
+
+        <label for="usernameInput">Usuario</label>
+        <input id="usernameInput" name="username" type="text" autocomplete="username" required>
+
+        <label for="passwordInput">Contrasena</label>
+        <input id="passwordInput" name="password" type="password" autocomplete="current-password" required>
+
+        <label for="accessInput">Acceso donde opera</label>
+        <select id="accessInput" name="accessPoint" required>
+          <option value="Acceso Peatonal Pajaritos">Acceso Peatonal Pajaritos</option>
+          <option value="Acceso Vehicular Pajaritos">Acceso Vehicular Pajaritos</option>
+          <option value="Portada Norte">Portada Norte</option>
+          <option value="Portada Sur">Portada Sur</option>
+          <option value="Portada Peatonal">Portada Peatonal</option>
+          <option value="Summit Logistic">Summit Logistic</option>
+        </select>
+
+        <button class="primary-button" type="submit">Entrar</button>
+        <p id="loginTime" class="login-time"></p>
+        <p id="loginMessage" class="message" role="alert"></p>
+      </form>
+    </section>
+  </main>
+
+  <script type="module" src="/js/login.js"></script>
+</body>
+</html>

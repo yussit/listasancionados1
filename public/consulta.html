@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Consulta segura de personas sancionadas para accesos ASIPONA.">
+  <title>Consulta de Sanciones ASIPONA</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#searchInput">Saltar a busqueda</a>
+
+  <header class="topbar">
+    <div class="shell topbar__inner">
+      <div class="brand">
+        <img class="brand-logo" src="/assets/logo-coatzacoalcos.png" alt="ASIPONA Coatzacoalcos">
+        <div>
+          <p class="eyebrow">ASIPONA</p>
+          <h1>Consulta de sancionados</h1>
+        </div>
+      </div>
+      <nav class="main-nav" aria-label="Navegacion principal">
+        <a class="is-active" href="#searchPanel">Consulta</a>
+        <a href="#adminPanel">Administracion</a>
+        <button id="themeToggle" type="button">Oscuro</button>
+        <button id="kioskToggle" type="button">Caseta</button>
+      </nav>
+      <div class="session-box" id="sessionBox">
+        <span id="sessionUser"></span>
+        <span id="sessionAccess"></span>
+        <button id="logoutButton" class="icon-button" type="button" title="Cerrar sesion" aria-label="Cerrar sesion">
+          <span aria-hidden="true">Salir</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell app-layout">
+    <section class="dashboard-hero" aria-labelledby="dashboardTitle">
+      <div>
+        <p class="eyebrow">Seguridad portuaria</p>
+        <h2 id="dashboardTitle">Verificacion de sanciones</h2>
+        <p>Consulta por nombre, empleado o QR antes de permitir el acceso.</p>
+      </div>
+      <div class="hero-metrics" aria-label="Resumen del modulo">
+        <span>Base sincronizada</span>
+        <span>Consulta segura</span>
+        <span>Bitacora activa</span>
+      </div>
+    </section>
+
+    <section class="ops-strip" aria-label="Estado operativo">
+      <div><span>Acceso</span><strong id="opAccess">-</strong></div>
+      <div><span>Operador</span><strong id="opOperator">-</strong></div>
+      <div><span>Hora</span><strong id="opClock">-</strong></div>
+      <div><span>Ultima busqueda</span><strong id="opLastSearch">Sin consultas</strong></div>
+    </section>
+
+    <section id="passwordPanel" class="password-panel" hidden>
+      <form id="passwordForm">
+        <div>
+          <h2>Cambio de contrasena requerido</h2>
+          <p>Actualiza tu contrasena para continuar usando el sistema.</p>
+        </div>
+        <label>Contrasena actual<input id="currentPasswordInput" type="password" required></label>
+        <label>Nueva contrasena<input id="newPasswordInput" type="password" minlength="6" required></label>
+        <button class="primary-button" type="submit">Actualizar contrasena</button>
+        <p id="passwordMessage" class="message" role="alert"></p>
+      </form>
+    </section>
+
+    <section id="searchPanel" class="search-panel" aria-labelledby="searchTitle">
+      <div class="search-header">
+        <div>
+          <p class="eyebrow">Accesos portuarios</p>
+          <h2 id="searchTitle">Buscar persona</h2>
+        </div>
+        <div class="toolbar-actions">
+          <button id="newSearchButton" class="secondary-button" type="button">Nueva busqueda</button>
+          <button id="refreshButton" class="secondary-button" type="button">Actualizar base</button>
+        </div>
+      </div>
+
+      <form id="searchForm" class="search-form">
+        <label for="searchInput">Nombre, numero de empleado o QR escaneado</label>
+        <div class="search-controls">
+          <input id="searchInput" name="q" type="search" autocomplete="off" minlength="3" placeholder="Ej. Juan Perez, EMP-001 o escanee QR" required>
+          <button class="primary-button" type="submit">Buscar</button>
+        </div>
+      </form>
+
+      <div class="scanner-actions" aria-label="Opciones de escaneo QR">
+        <button id="cameraButton" class="secondary-button" type="button">Escanear con camara</button>
+        <p>Los lectores QR fisicos funcionan como teclado: coloque el cursor en el campo y escanee.</p>
+      </div>
+
+      <div id="cameraPanel" class="camera-panel" hidden>
+        <video id="cameraVideo" playsinline muted></video>
+        <canvas id="cameraCanvas" hidden></canvas>
+        <button id="stopCameraButton" class="secondary-button" type="button">Detener camara</button>
+      </div>
+
+      <div id="statusMessage" class="message" role="status" aria-live="polite"></div>
+      <div id="qrDetails" class="qr-details" hidden></div>
+      <div id="accessDecision" class="decision" aria-live="assertive"></div>
+      <div id="results" class="results" aria-live="polite"></div>
+    </section>
+
+    <section id="adminPanel" class="admin-panel" aria-labelledby="adminTitle" hidden>
+      <div class="search-header">
+        <div>
+          <p class="eyebrow">Administracion</p>
+          <h2 id="adminTitle">Panel administrativo</h2>
+        </div>
+        <button id="reloadAdminButton" class="secondary-button" type="button">Actualizar panel</button>
+      </div>
+
+      <div id="adminStats" class="admin-grid"></div>
+
+      <form id="userForm" class="admin-form">
+        <div class="admin-form__header">
+          <h3 id="userFormTitle">Crear usuario</h3>
+          <button id="cancelEditUserButton" class="secondary-button subtle-button" type="button" hidden>Cancelar edicion</button>
+        </div>
+        <div class="admin-form__grid">
+          <label>Usuario<input id="newUsername" required></label>
+          <label>Nombre<input id="newName" required></label>
+          <label>Rol
+            <select id="newRole">
+              <option value="operator">Operador</option>
+              <option value="admin">Administrador</option>
+            </select>
+          </label>
+          <label>Acceso<input id="newAccess" required></label>
+          <label>Contrasena<input id="newPassword" type="password" required></label>
+        </div>
+        <p class="form-hint">Al editar, deja la contrasena vacia si no deseas cambiarla.</p>
+        <button id="saveUserButton" class="primary-button" type="submit">Crear usuario</button>
+      </form>
+
+      <div class="admin-columns">
+        <div>
+          <h3>Usuarios</h3>
+          <div id="usersList" class="admin-list"></div>
+        </div>
+        <div>
+          <h3>Bitacora reciente</h3>
+          <div class="audit-filters">
+            <input id="auditDateFrom" type="date" aria-label="Fecha inicial">
+            <input id="auditDateTo" type="date" aria-label="Fecha final">
+            <input id="auditUserFilter" placeholder="Usuario">
+            <input id="auditAccessFilter" placeholder="Acceso">
+            <select id="auditResultFilter" aria-label="Resultado">
+              <option value="">Todos</option>
+              <option value="blocked">Bloqueado</option>
+              <option value="clear">Permitido</option>
+            </select>
+            <button id="filterAuditButton" class="secondary-button subtle-button" type="button">Filtrar</button>
+            <button id="exportAuditButton" class="secondary-button subtle-button" type="button">Exportar CSV</button>
+          </div>
+          <div id="auditList" class="admin-list"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <template id="resultTemplate">
+    <article class="result-card">
+      <div class="result-card__header">
+        <div>
+          <h3 data-field="nombre"></h3>
+          <p data-field="identificacion"></p>
+          <p data-field="empresa"></p>
+        </div>
+        <span class="badge" data-field="estatus"></span>
+      </div>
+      <dl class="details">
+        <div>
+          <dt>Motivo</dt>
+          <dd data-field="motivo"></dd>
+        </div>
+        <div>
+          <dt>Situacion</dt>
+          <dd data-field="estatusFuente"></dd>
+        </div>
+        <div>
+          <dt>Tipo</dt>
+          <dd data-field="tipoSancion"></dd>
+        </div>
+        <div>
+          <dt>Inicio</dt>
+          <dd data-field="fechaInicioTexto"></dd>
+        </div>
+        <div>
+          <dt>Termino</dt>
+          <dd data-field="fechaTerminoTexto"></dd>
+        </div>
+        <div class="details__wide">
+          <dt>Observaciones</dt>
+          <dd data-field="observaciones"></dd>
+        </div>
+      </dl>
+    </article>
+  </template>
+
+  <script type="module" src="/js/consulta.js"></script>
+</body>
+</html>

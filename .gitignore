@@ -1,0 +1,22 @@
+node_modules/
+.env
+.env.*
+!.env.example
+npm-debug.log*
+pnpm-debug.log*
+
+# Datos operativos sensibles
+data/audit-log.ndjson
+data/users.json
+data/sanciones.csv
+data/*.backup.csv
+
+# Mantener ejemplos versionables
+!data/users.example.json
+!data/sanciones.example.csv
+
+# Archivos temporales del sistema
+*.tmp
+*.bak
+Thumbs.db
+.DS_Store

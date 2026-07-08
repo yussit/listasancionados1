@@ -1,0 +1,13 @@
+[
+  {
+    "id": "usr-admin",
+    "username": "yussef",
+    "name": "Administrador ASIPONA",
+    "role": "admin",
+    "accessPoint": "Administracion",
+    "passwordHash": "scrypt:tT-9_NGc29EhA5rPlFktlg:-rUfITkP3CMaXGLgWplpdNl6ZL3_zUdZ8X0HSsDjpW2juCiAw6JHiQ0NHIiIblQBcXTRr3P7X_tpoSVXO2fXlQ",
+    "active": true,
+    "forcePasswordChange": true,
+    "lastLoginAt": null
+  }
+]
